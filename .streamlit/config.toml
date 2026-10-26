@@ -1,0 +1,9 @@
+[client]
+# Hide the Deploy button and 3-dots toolbar from Streamlit's header
+toolbarMode = "minimal"
+
+[server]
+headless = true
+
+[theme]
+base = "dark"

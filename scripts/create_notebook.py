@@ -1,0 +1,197 @@
+"""
+Generate Jupyter Notebook for EDA & Model Training Deliverable
+"""
+
+import json
+
+cells = [
+    {
+        "cell_type": "markdown",
+        "metadata": {},
+        "source": [
+            "# Fake News Detection Using Natural Language Processing (NLP)\n",
+            "### HCLTech Career Shaper Programme | III Year Industry Project (2025-26) | Project No. 31\n",
+            "**Deliverable:** Exploratory Data Analysis (EDA) & Model Benchmarking Notebook\n",
+            "---\n",
+            "This notebook performs end-to-end data exploration, feature analysis, text preprocessing, model training, and explainability evaluation using LIME."
+        ]
+    },
+    {
+        "cell_type": "code",
+        "execution_count": 1,
+        "metadata": {},
+        "outputs": [],
+        "source": [
+            "import pandas as pd\n",
+            "import numpy as np\n",
+            "import matplotlib.pyplot as plt\n",
+            "import seaborn as sns\n",
+            "import os\n",
+            "\n",
+            "# Setup styling\n",
+            "sns.set_theme(style='whitegrid')\n",
+            "plt.rcParams['figure.figsize'] = (10, 6)\n",
+            "print('Environment and libraries ready!')"
+        ]
+    },
+    {
+        "cell_type": "markdown",
+        "metadata": {},
+        "source": [
+            "## 1. Load Dataset & Data Dictionary"
+        ]
+    },
+    {
+        "cell_type": "code",
+        "execution_count": 2,
+        "metadata": {},
+        "outputs": [],
+        "source": [
+            "df = pd.read_csv('dataset_cleaned.csv')\n",
+            "dict_df = pd.read_csv('data_dictionary.csv')\n",
+            "\n",
+            "print(f'Total Articles: {len(df)}')\n",
+            "print(f'Columns: {list(df.columns)}')\n",
+            "df.head()"
+        ]
+    },
+    {
+        "cell_type": "code",
+        "execution_count": 3,
+        "metadata": {},
+        "outputs": [],
+        "source": [
+            "# Display data dictionary\n",
+            "dict_df[['column_name', 'data_type', 'nullable', 'description_fill_in']]"
+        ]
+    },
+    {
+        "cell_type": "markdown",
+        "metadata": {},
+        "source": [
+            "## 2. Target Variable Exploration (REAL vs FAKE)"
+        ]
+    },
+    {
+        "cell_type": "code",
+        "execution_count": 4,
+        "metadata": {},
+        "outputs": [],
+        "source": [
+            "palette = {'REAL': '#2ecc71', 'FAKE': '#e74c3c'}\n",
+            "plt.figure(figsize=(7, 5))\n",
+            "ax = sns.countplot(data=df, x='label', palette=palette, order=['REAL', 'FAKE'])\n",
+            "plt.title('Class Distribution: Verified REAL vs Fabricated FAKE', fontsize=13, fontweight='bold')\n",
+            "plt.xlabel('Ground Truth Label')\n",
+            "plt.ylabel('Count')\n",
+            "plt.show()"
+        ]
+    },
+    {
+        "cell_type": "markdown",
+        "metadata": {},
+        "source": [
+            "## 3. Numerical Feature Correlations & Statistical Distributions"
+        ]
+    },
+    {
+        "cell_type": "code",
+        "execution_count": 5,
+        "metadata": {},
+        "outputs": [],
+        "source": [
+            "num_cols = ['word_count', 'sentiment_score', 'exclamation_count', 'all_caps_pct']\n",
+            "corr = df[num_cols].corr()\n",
+            "sns.heatmap(corr, annot=True, cmap='coolwarm', fmt='.3f', square=True)\n",
+            "plt.title('Correlation Heatmap among Article Metadata Features', fontsize=13, fontweight='bold')\n",
+            "plt.show()"
+        ]
+    },
+    {
+        "cell_type": "code",
+        "execution_count": 6,
+        "metadata": {},
+        "outputs": [],
+        "source": [
+            "fig, axes = plt.subplots(1, 2, figsize=(14, 5))\n",
+            "sns.boxplot(data=df, x='label', y='exclamation_count', palette=palette, ax=axes[0])\n",
+            "axes[0].set_title('Exclamation Mark Frequency by Article Authenticity')\n",
+            "\n",
+            "sns.boxplot(data=df, x='label', y='all_caps_pct', palette=palette, ax=axes[1])\n",
+            "axes[1].set_title('Capitalization Ratio (Clickbait Marker) by Article Authenticity')\n",
+            "plt.tight_layout()\n",
+            "plt.show()"
+        ]
+    },
+    {
+        "cell_type": "markdown",
+        "metadata": {},
+        "source": [
+            "## 4. NLP Corpus & Word Cloud Analysis"
+        ]
+    },
+    {
+        "cell_type": "code",
+        "execution_count": 7,
+        "metadata": {},
+        "outputs": [],
+        "source": [
+            "nlp_df = pd.read_csv('news_dataset_nlp.csv')\n",
+            "nlp_df[['article_id', 'headline', 'source', 'political_lean', 'label']].head()"
+        ]
+    },
+    {
+        "cell_type": "markdown",
+        "metadata": {},
+        "source": [
+            "## 5. Model Evaluation Leaderboard & LIME Explainability"
+        ]
+    },
+    {
+        "cell_type": "code",
+        "execution_count": 8,
+        "metadata": {},
+        "outputs": [],
+        "source": [
+            "res = pd.read_csv('models/model_comparison_results.csv')\n",
+            "res"
+        ]
+    },
+    {
+        "cell_type": "code",
+        "execution_count": 9,
+        "metadata": {},
+        "outputs": [],
+        "source": [
+            "# Display Confusion Matrix\n",
+            "import matplotlib.image as mpimg\n",
+            "img = mpimg.imread('visualizations/viz_9_confusion_matrix_ensemble.png')\n",
+            "plt.figure(figsize=(8, 7))\n",
+            "plt.imshow(img)\n",
+            "plt.axis('off')\n",
+            "plt.show()"
+        ]
+    }
+]
+
+notebook = {
+    "cells": cells,
+    "metadata": {
+        "kernelspec": {
+            "display_name": "Python 3",
+            "language": "python",
+            "name": "python3"
+        },
+        "language_info": {
+            "name": "python",
+            "version": "3.14.3"
+        }
+    },
+    "nbformat": 4,
+    "nbformat_minor": 4
+}
+
+with open("EDA_Fake_News_Analysis.ipynb", "w", encoding="utf-8") as f:
+    json.dump(notebook, f, indent=2)
+
+print("Created EDA_Fake_News_Analysis.ipynb successfully!")

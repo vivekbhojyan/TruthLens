@@ -1,0 +1,9 @@
+column_name,data_type,sample_value_1,sample_value_2,sample_value_3,nullable,description_fill_in
+article_id,integer,1,2,3,No,"Unique identifier assigned to each news article entry in the dataset."
+source,string (categorical),source_11,source_2,source_15,No,"Identifier representing the publishing news outlet or content domain origin."
+word_count,integer,1098,1222,1249,No,"Total word count of the news article content indicating story depth and length."
+sentiment_score,float,0.181,-0.041,0.067,No,"Continuous compound polarity sentiment score ranging from -1.0 (strongly negative) to +1.0 (strongly positive)."
+exclamation_count,integer,7,13,13,No,"Total count of exclamation marks (!) in the article text; proxy metric for sensationalism and emotional tone."
+all_caps_pct,float,0.063,0.118,0.215,No,"Proportion of uppercase words/characters to total text length; marker for clickbait capitalization and urgency."
+label,string (binary categorical),REAL,FAKE,REAL,No,"Target classification ground truth: REAL denotes verified factual reporting; FAKE denotes fabricated/disinformation."
+political_lean,string (categorical),Unknown,Center,Unknown,No,"Editorial political leaning or bias of the reporting source (Left, Center, Right, or Unknown)."

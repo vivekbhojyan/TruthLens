@@ -1,0 +1,1 @@
+print("Directory creation test")
